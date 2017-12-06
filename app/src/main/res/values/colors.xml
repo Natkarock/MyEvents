@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#f6732c</color>
+    <color name="colorPrimaryDark">#ca500e</color>
+    <color name="colorAccent">#ffffff</color>
+    <color name="edit_footer">#eeeeee</color>
+    <color name="main_text">#000000</color>
+    <color name="main_footer">#eeeeee</color>
+    <color name="edittextframe">#882d00</color>
+    <color name="btn_text">#ffffff</color>
+    <color name="text_light">#ffffff</color>
+    <color name="primary_shadow_footer">#ccf6732c</color>
+    <color name="footer_botom_alert">#f3252a</color>
+    <color name="item_footer">#ffffff</color>
+
+</resources>
