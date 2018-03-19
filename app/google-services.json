@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "217368588446",
+    "firebase_url": "https://contactsbirthday-a8939.firebaseio.com",
+    "project_id": "contactsbirthday-a8939",
+    "storage_bucket": "contactsbirthday-a8939.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217368588446:android:32747585e261fc85",
+        "android_client_info": {
+          "package_name": "com.natateam.myevents"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217368588446-q4169scl7mlbk820v8d9rlvdv878hqqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXioF7CI4qDOzfkmrHXkXnWqpOifgQNlg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

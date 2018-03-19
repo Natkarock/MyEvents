@@ -6,7 +6,20 @@
     <string name="date_mask">ДД.ММ.ГГГГ</string>
     <string name="time_mask">08:00</string>
     <string name="btn_add">ДОБАВИТЬ</string>
+    <string name="btn_change">ИЗМЕНИТЬ</string>
+    <string name="btn_delete">УДАЛИТЬ</string>
     <string name="enter_title">Введите навзание</string>
     <string name="enter_date">Введите дату</string>
     <string name="enter_right_date">Выберите время позднее текущего</string>
+    <string-array name="main_titles">
+        <item>Задачи</item>
+        <item>Повторы</item>
+        <item>Дни рождения</item>
+    </string-array>
+    <string name="birthday_dialog_date">Дата рождения</string>
+    <string name="birthday_dialog_button">Ввод</string>
+    <string name="birthday_dialog_alarm">Введите день рождения в правильном формате</string>
+    <string name="date_mask_edittext">##.##.####</string>
+    <string name="name_hint">Имя</string>
+    <string name="choose_just_one_weekday">Выберите хотя бы один день недели</string>
 </resources>

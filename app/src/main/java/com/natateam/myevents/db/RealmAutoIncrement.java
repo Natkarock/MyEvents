@@ -25,7 +25,6 @@ public final class RealmAutoIncrement {
     }
 
     private int getLastIdFromModel(Class<? extends RealmObject> clazz) {
-
         String primaryKeyColumnName = "id";
         Number lastId = realmMain.where(clazz).max(primaryKeyColumnName);
         return lastId == null ? 0 : lastId.intValue();

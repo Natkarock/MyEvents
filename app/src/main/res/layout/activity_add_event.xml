@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/main_footer"
     android:fitsSystemWindows="false">
+
+    <TextView
+        android:id="@+id/btn_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/footer_botom_alert"
+        android:elevation="5dp"
+        android:gravity="left"
+        android:padding="10dp"
+        android:text="@string/btn_delete"
+        android:textColor="@color/text_light"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/btn_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTime" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="0dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="0dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <include layout="@layout/toolbar_add_event" />
 
@@ -26,6 +43,7 @@
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
@@ -43,6 +61,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
@@ -69,13 +88,15 @@
         android:background="@color/primary_shadow_footer"
         android:drawableLeft="@drawable/ic_calendar"
         android:drawablePadding="10dp"
+        android:elevation="5dp"
         android:gravity="center_vertical"
         android:padding="10dp"
         android:text="@string/date_mask"
         android:textColor="@color/text_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTime" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
 
     <TextView
         android:id="@+id/txtTime"
@@ -90,21 +111,34 @@
         android:text="@string/time_mask"
         android:textColor="@color/text_light"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/txtDate" />
 
     <TextView
         android:id="@+id/btn_add"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/footer_botom_alert"
+        android:elevation="5dp"
         android:gravity="right"
         android:padding="10dp"
         android:text="@string/btn_add"
         android:textColor="@color/text_light"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/btn_delete"
+        app:layout_constraintTop_toBottomOf="@+id/weekdays_picker" />
+
+    <view
+        android:id="@+id/weekdays_picker"
+        class="com.dpro.widgets.WeekdaysPicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTime"
+        app:sunday_first_day="false"/>
 
 </android.support.constraint.ConstraintLayout>

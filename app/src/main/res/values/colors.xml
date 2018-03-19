@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#f6732c</color>
     <color name="colorPrimaryDark">#ca500e</color>
-    <color name="colorAccent">#ffffff</color>
+    <color name="colorAccent">#f3252a</color>
     <color name="edit_footer">#eeeeee</color>
     <color name="main_text">#000000</color>
     <color name="main_footer">#eeeeee</color>
