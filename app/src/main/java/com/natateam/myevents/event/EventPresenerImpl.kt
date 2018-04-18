@@ -1,6 +1,8 @@
 package com.natateam.myevents.event
 
+import android.support.v7.app.AppCompatActivity
 import com.natateam.myevents.Consts
+import com.natateam.myevents.FirebaseHelper
 import com.natateam.myevents.alarm.AlarmHelper
 import com.natateam.myevents.db.Contact
 import com.natateam.myevents.db.Event
@@ -17,14 +19,17 @@ import javax.inject.Inject
 
 class EventPresenerImpl @Inject
 constructor(public var view: EventContract.EventView,public  var realmHelper: RealmHelper,public var alarmHelper: AlarmHelper) : EventContract.EventPresenter {
-    override fun deleteObject(model: RealmObject?) {
-        if (model!=null) {
-            realmHelper.deleteObject(model!!)
-        }
+    override fun deleteEvent(id: String) {
+        FirebaseHelper.deleteEventById(id)
     }
 
-    override fun createOrUpdateContact(contact: Contact?, contactModel: ContactModel) {
-        realmHelper.createOrUpdateContact(contact,contactModel)
+    override fun deleteContact(id: String) {
+        FirebaseHelper.deleteContactById(id)
+    }
+
+
+    override fun createOrUpdateContact(contactModel: ContactModel) {
+        FirebaseHelper.addContact(contactModel)
     }
 
 
@@ -33,19 +38,18 @@ constructor(public var view: EventContract.EventView,public  var realmHelper: Re
 
     }
 
-    override fun createOrUpdateEvent(event: Event?, title: String, desc: String, date: String, time: String, dateMS: Long,type:String, task_repeat_days:String? ) {
-        realmHelper.createorUpdateEvent(event, EventModel(null, title = title,desc =  desc, task_date = date,
-                task_time =  time,dateMS =  dateMS, task_type = type, task_repeat_days = task_repeat_days))
+    override fun createOrUpdateEvent(eventModel: EventModel ) {
+        FirebaseHelper.addEvent( eventModel)
 
     }
 
 
 
-    override fun setData(id: Long, type: String) {
-        if (type!= Consts.BIRTH_TYPE){
-            view.setData(realmHelper.getEventById(id) )
+    override fun setData(id: String, type: String) {
+        if (type == Consts.BIRTH_TYPE){
+            FirebaseHelper.getContactyId(id){contactModel -> view.setContactData(contactModel) }
         }else{
-            view.setData(realmHelper.getContactById(id))
+            FirebaseHelper.getEventById(id){eventModel -> view.setEventData(eventModel) }
         }
     }
 

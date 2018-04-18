@@ -1,46 +1,46 @@
 package com.natateam.myevents.adapter
 
-import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.natateam.myevents.Consts
 import com.natateam.myevents.R
 import com.natateam.myevents.TimeUtils
-import com.natateam.myevents.db.Event
-import io.realm.OrderedRealmCollection
+import com.natateam.myevents.model.EventModel
 import org.jetbrains.anko.find
 
 /**
- * Created by macbook on 07/07/ 15.
+ * Created by macbook on 20/03/ 15.
  */
-class MyRecyclerViewAdapter(private val context: Context, data: OrderedRealmCollection<Event>, val onClick: (Event) -> Unit) : RealmRecyclerViewAdapter<Event, MyViewHolder>(context, data, true) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = inflater.inflate(R.layout.event_item, parent, false)
-        return MyViewHolder(itemView, onClick)
-    }
-
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val obj = data!![position]
-        var isTop = true
-        if (position > 0) {
-            val prevEvent = data!![position - 1]
-            val currentBeginOfDay = TimeUtils.getBeginOfDaInMillis(obj.dateMS)
-            val prevBeginOfDay = TimeUtils.getBeginOfDaInMillis(prevEvent.dateMS)
-            if (currentBeginOfDay == prevBeginOfDay) {
-                isTop = false
+class FirestoreEventAdapter(options: FirestoreRecyclerOptions<EventModel>, val onClick:(EventModel)->Unit) : FirestoreRecyclerAdapter<EventModel, MyViewHolder>(options) {
+    var prevEvent:EventModel? =null
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int, model: EventModel) {
+        var isTop= true
+        if (prevEvent!=null){
+            if (position > 0) {
+                val currentBeginOfDay = TimeUtils.getBeginOfDaInMillis(model.dateMS)
+                val prevBeginOfDay = TimeUtils.getBeginOfDaInMillis(prevEvent!!.dateMS)
+                if (currentBeginOfDay == prevBeginOfDay) {
+                    isTop = false
+                }
             }
         }
-        holder.setItem(obj, isTop)
+        prevEvent = model
+        holder.setItem(model,isTop)
     }
 
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = LayoutInflater.from(parent!!.context).inflate(R.layout.event_item, parent, false)
+        return MyViewHolder(itemView, onClick)
+    }
 }
 
-class MyViewHolder(val view: View, val onClick: (Event) -> Unit) : RecyclerView.ViewHolder(view) {
+class MyViewHolder(val view: View, val onClick: (EventModel) -> Unit) : RecyclerView.ViewHolder(view) {
     var txtTitle: TextView? = null
     var txtType: TextView? = null
     var txtDescription: TextView? = null
@@ -58,7 +58,7 @@ class MyViewHolder(val view: View, val onClick: (Event) -> Unit) : RecyclerView.
         txtDateString = view.find(R.id.txt_date_string)
     }
 
-    fun setItem(obj: Event, isTop: Boolean) {
+    fun setItem(obj: EventModel, isTop: Boolean) {
         with(obj) {
             txtTitle!!.text = title
             txtDescription!!.text = desc
@@ -73,8 +73,4 @@ class MyViewHolder(val view: View, val onClick: (Event) -> Unit) : RecyclerView.
             view.setOnClickListener { onClick(this) }
         }
     }
-
 }
-
-
-

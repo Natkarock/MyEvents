@@ -15,5 +15,5 @@ class AuthModule(val view:MainCotractor.AuthView){
     fun provideView():MainCotractor.AuthView = view
 
     @Provides
-    fun providePresenter(view: MainCotractor.AuthView,firebaseHelper:FirebaseHelper):AuthPresenterImpl = AuthPresenterImpl(view,firebaseHelper)
+    fun providePresenter(view: MainCotractor.AuthView):AuthPresenterImpl = AuthPresenterImpl(view)
 }

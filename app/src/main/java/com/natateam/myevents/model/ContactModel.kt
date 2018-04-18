@@ -5,7 +5,7 @@ import com.natateam.myevents.Consts
 /**
  * Created by macbook on 09/03/ 15.
  */
-class ContactModel( var contact_id: Long?= null,
+class ContactModel( var contact_id: String?= null,
                     var contact_google_id: String? = null,
                     var contact_email:String?= null,
                     var contact_name: String? = null,

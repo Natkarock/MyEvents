@@ -36,8 +36,4 @@ class AppModule (val application: Application ) {
     @Singleton
     fun provideRealm(alarmHelper: AlarmHelper) = RealmHelper(alarmHelper);
 
-    @Provides
-    @Singleton
-    fun provideFirebase() = FirebaseHelper
-
 }

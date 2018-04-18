@@ -1,5 +1,7 @@
 package com.natateam.myevents.mainlist
 
+import android.support.v7.app.AppCompatActivity
+import com.firebase.ui.auth.data.model.User
 import com.natateam.myevents.BasePresenter
 import com.natateam.myevents.BaseView
 import com.natateam.myevents.Consts
@@ -27,7 +29,7 @@ class MainCotractor {
     interface BirthdayView : BaseView {
         fun loadData(list: OrderedRealmCollection<Contact>)
         fun showBirthdayDialog()
-        fun showEventActivity(id:Long,type:String = Consts.BIRTH_TYPE)
+        fun showEventActivity(id:String?,type:String = Consts.BIRTH_TYPE)
     }
 
 
@@ -39,11 +41,10 @@ class MainCotractor {
     {
         fun checkIsSignIn()
         fun loadDataForUser()
-        fun startAuthActivity()
     }
 
     interface AuthPresenter: BasePresenter<AuthView>{
-       fun checkIsSign()
+       fun checkIsSign(activity:AppCompatActivity)
     }
 
 

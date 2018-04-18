@@ -5,6 +5,7 @@ import com.natateam.myevents.BaseView
 import com.natateam.myevents.db.Contact
 import com.natateam.myevents.db.Event
 import com.natateam.myevents.model.ContactModel
+import com.natateam.myevents.model.EventModel
 import io.realm.RealmModel
 import io.realm.RealmObject
 
@@ -14,14 +15,16 @@ import io.realm.RealmObject
 
 interface EventContract {
     interface EventView : BaseView {
-        fun setData(model:RealmObject?)
+        fun setContactData(model:ContactModel)
+        fun setEventData(model:EventModel)
     }
 
     interface EventPresenter : BasePresenter<EventView> {
-        fun createOrUpdateEvent(event: Event?, title: String, desc: String, date: String, time: String, dateMS: Long,type:String,task_repeat_days:String? = null)
-        fun createOrUpdateContact(contact: Contact?, contactModel: ContactModel)
-        fun deleteObject(model: RealmObject?)
-        fun setData(id: Long, type: String)
+        fun createOrUpdateEvent( eventModel: EventModel)
+        fun createOrUpdateContact(contactModel: ContactModel)
+        fun deleteEvent(id: String)
+        fun deleteContact(id: String)
+        fun setData(id: String, type: String)
     }
 
 }

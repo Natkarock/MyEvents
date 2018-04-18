@@ -139,6 +139,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTime"
-        app:sunday_first_day="false"/>
+        app:sunday_first_day="false"
+        />
 
 </android.support.constraint.ConstraintLayout>

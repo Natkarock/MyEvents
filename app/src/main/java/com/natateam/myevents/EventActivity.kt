@@ -14,18 +14,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.dpro.widgets.WeekdaysPicker
 import com.natateam.myevents.R.string.*
-import com.natateam.myevents.adapter.MainPagerAdapter
-import com.natateam.myevents.db.Contact
-import com.natateam.myevents.db.Event
 import com.natateam.myevents.event.EventContract
 import com.natateam.myevents.event.EventModule
 import com.natateam.myevents.event.EventPresenerImpl
 import com.natateam.myevents.extension.app
 import com.natateam.myevents.model.ContactModel
+import com.natateam.myevents.model.EventModel
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout
-import io.realm.RealmModel
-import io.realm.RealmObject
 import org.jetbrains.anko.find
 import org.jetbrains.anko.toast
 import java.util.*
@@ -35,6 +31,8 @@ import javax.inject.Inject
  * Created by macbook on 07/07/ 15.
  */
 class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer.materialdatetimepicker.time.TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+
+
     internal var txtTitle: EditText? = null
     internal var txtDesc: EditText? = null
     internal var txtDate: TextView? = null
@@ -47,7 +45,8 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
     private  var textInputTitle:TextInputLayout? = null
     private var weekdaysPicker: WeekdaysPicker? = null
     private var date: Calendar? = null
-    private var model: RealmObject? = null
+    private var contactModel: ContactModel? = null
+    private var eventModel:EventModel? = null
     private var type: String = Consts.TODO_TYPE
 
 
@@ -66,8 +65,8 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
             }
             initFields()
             if (intent.hasExtra(EVENT_ID)) {
-                val id = intent.getLongExtra(EVENT_ID, 0)
-                presenter!!.setData(id, type)
+                val id = intent.getStringExtra(EVENT_ID)
+                setData(id, type)
             }
 
         }
@@ -103,21 +102,22 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
         }
         val titles: Array<out String>? = resources.getStringArray(R.array.main_titles)
         var toolbar_title_string:String? = null
+        weekdaysPicker?.selectedDays = listOf<Int>()
         if (titles!=null) {
             when (type) {
                 Consts.TODO_TYPE -> {
-                    toolbar_title_string = titles!![0]
+                    toolbar_title_string = titles[0]
                 }
                 Consts.REPEAT_TYPE -> {
                     txtDate!!.visibility= View.GONE
                     weekdaysPicker!!.visibility= View.VISIBLE
-                    toolbar_title_string = titles!![1]
+                    toolbar_title_string = titles[1]
                 }
                 Consts.BIRTH_TYPE -> {
                     txtDesc!!.visibility= View.GONE
                     txtTitle!!.hint= getString(R.string.name_hint)
                     textInputTitle!!.hint =getString(R.string.name_hint)
-                    toolbar_title_string = titles!![2]
+                    toolbar_title_string = titles[2]
                 }
 
             }
@@ -140,27 +140,31 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
     }
 
 
-    override fun setData(model: RealmObject?) {
-        this.model = model
-        if (type != Consts.BIRTH_TYPE) {
-            with(model as Event) {
-                txtTitle!!.setText(title)
-                txtDate!!.text = task_date
-                txtTime!!.text = task_time
-                txtDesc!!.setText(model.desc)
-            }
-        } else {
-            with(model as Contact) {
-                txtTitle!!.setText(contact_name)
-                if (contact_birthday != null) {
-                    txtDate!!.text = contact_birthday
-                }
-                txtTime!!.text = contact_time
-            }
-        }
+    fun setData(id:String, type:String) {
         btnAdd?.text = getString(btn_add)
-        btnDelete?.visibility = View.VISIBLE
+        //btnDelete?.visibility = View.VISIBLE
+        presenter.setData(id,type)
 
+    }
+    override fun setEventData(model: EventModel) {
+        with(model ) {
+            eventModel = model
+            txtTitle!!.setText(title)
+            txtDate!!.text = task_date
+            txtTime!!.text = task_time
+            txtDesc!!.setText(model.desc)
+        }
+    }
+
+    override fun setContactData(model: ContactModel) {
+        with(model ) {
+            contactModel = model
+            txtTitle!!.setText(contact_name)
+            if (contact_birthday != null) {
+                txtDate!!.text = contact_birthday
+            }
+            txtTime!!.text = contact_time
+        }
     }
 
     fun dateClick() {
@@ -209,12 +213,8 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
                     toast(getString(enter_right_date))
                     return
                 }
-                var event: Event? = null
-                if (model != null) {
-                    event = model as Event
-                }
-                presenter!!.createOrUpdateEvent(event, txtTitle!!.text.toString(), txtDesc!!.text.toString(),
-                        txtDate!!.text.toString(), txtTime!!.text.toString(), dateMs, type!!)
+                presenter.createOrUpdateEvent(EventModel(event_id = eventModel?.event_id,title = txtTitle!!.text.toString(),desc =  txtDesc!!.text.toString(),
+                        task_date = txtDate!!.text.toString(),task_time =  txtTime!!.text.toString(),dateMS =  dateMs, task_type = type))
             }
             Consts.REPEAT_TYPE->{
                 if (weekdaysPicker!!.noDaySelected()){
@@ -223,19 +223,12 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
                 }
                 val weekdays = weekdaysPicker!!.getSelectedDaysText()
                 val weekdaysString = weekdays.joinToString(separator = " ")
-                var event: Event? = null
-                if (model != null) {
-                    event = model as Event
-                }
-                presenter!!.createOrUpdateEvent(event, txtTitle!!.text.toString(), txtDesc!!.text.toString(),
-                        txtDate!!.text.toString(), txtTime!!.text.toString(), dateMs, type!!,task_repeat_days = weekdaysString)
+                presenter!!.createOrUpdateEvent( EventModel(event_id = eventModel?.event_id,title= txtTitle!!.text.toString(),desc =  txtDesc!!.text.toString(),
+                        task_date = txtDate!!.text.toString(),task_time =  txtTime!!.text.toString(),dateMS =  dateMs,task_type =  type,task_repeat_days = weekdaysString))
             }
             Consts.BIRTH_TYPE ->{
-                var contact: Contact? = null
-                if (model != null) {
-                    contact = model as Contact
-                }
-                presenter!!.createOrUpdateContact(contact, contactModel = ContactModel(contact_name = txtTitle!!.text.toString(), contact_birthday = txtDate!!.text.toString(),
+
+                presenter.createOrUpdateContact(contactModel = ContactModel(contact_id = contactModel?.contact_id,contact_name = txtTitle!!.text.toString(), contact_birthday = txtDate!!.text.toString(),
                         contact_time = txtTime!!.text.toString(), contact_date_ms = dateMs))
             }
 
@@ -246,9 +239,11 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
     }
 
     fun delete() = {
-        if (model != null) {
-            presenter.deleteObject(model!!)
-        }
+        /*if (eventModel != null) {
+            presenter.deleteEvent(eventModel?.event_id!!)
+        }else if  (contactModel!=null){
+            presenter.deleteContact(contactModel?.contact_id!!)
+        }*/
     }
 
 
@@ -266,7 +261,6 @@ class EventActivity : AppCompatActivity(), EventContract.EventView, com.wdullaer
     }
 
     override fun onTimeSet(view: RadialPickerLayout, hourOfDay: Int, minute: Int, second: Int) {
-
         date!!.set(Calendar.HOUR_OF_DAY, hourOfDay)
         date!!.set(Calendar.MINUTE, minute)
         txtTime!!.text = TimeUtils.getTimeString(date!!.timeInMillis)

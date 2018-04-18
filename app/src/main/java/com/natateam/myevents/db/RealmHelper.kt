@@ -16,10 +16,6 @@ class  RealmHelper @Inject
 constructor(private val alarmHelper: AlarmHelper) {
     var realm: Realm? = null
     internal var config: RealmConfiguration
-
-
-
-
     fun getAllEvents(): OrderedRealmCollection<Event> {
         realm = Realm.getInstance(config)
         val events = realm!!.where(Event::class.java).greaterThan("dateMS", System.currentTimeMillis()).findAll()
@@ -59,7 +55,7 @@ constructor(private val alarmHelper: AlarmHelper) {
 
     fun createorUpdateEvent(event: Event?, eventModel: EventModel): Long? {
         realm = Realm.getInstance(config)
-        var id: Long = 0
+        var id: Long
         if (event == null) {
             id = RealmAutoIncrement.getInstance(Event::class.java, realm).nextIdFromModel.toLong()
         } else {
@@ -79,7 +75,7 @@ constructor(private val alarmHelper: AlarmHelper) {
                 eventIn.title = eventModel.title
                 eventIn.task_type = eventModel.task_type
                 eventIn.task_repeat_days = eventModel.task_repeat_days
-                alarmHelper.setEventAlarm(eventIn)
+                //alarmHelper.setEventAlarm(eventIn)
             } finally {
                 realm.close()
 
@@ -116,7 +112,7 @@ constructor(private val alarmHelper: AlarmHelper) {
         if (contact == null) {
             id = RealmAutoIncrement.getInstance(Contact::class.java, realm).nextIdFromModel.toLong()
         } else {
-            id = contact!!.id!!
+            id = contact.id!!
         }
         realm!!.executeTransaction() { realm ->
             try {
@@ -131,8 +127,7 @@ constructor(private val alarmHelper: AlarmHelper) {
                 contactIn?.contact_group = contactModel.contact_group
                 contactIn?.contact_phone = contactModel.contact_phone
                 contact?.contact_birthday = contactModel.contact_birthday
-                alarmHelper.setContactAlarm(contactIn)
-
+                //alarmHelper.setContactAlarm(contactIn)
             } finally {
                 realm.close()
             }
@@ -146,11 +141,11 @@ constructor(private val alarmHelper: AlarmHelper) {
             try {
                 if (model is Event) {
                     with(model as Event) {
-                        alarmHelper.deleteAlarmById(id!!, task_type!!)
+                        //alarmHelper.deleteAlarmById(id, task_type!!)
                     }
                 }else if (model is Contact){
                     with(model as Contact) {
-                        alarmHelper.deleteAlarmById(id!!, Consts.BIRTH_TYPE)
+                        //alarmHelper.deleteAlarmById(id!!, Consts.BIRTH_TYPE)
                     }
                 }
                 model.deleteFromRealm()

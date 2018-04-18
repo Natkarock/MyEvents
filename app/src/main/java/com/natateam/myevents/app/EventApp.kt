@@ -2,6 +2,7 @@ package com.natateam.myevents.app
 
 import android.app.Activity
 import android.app.Application
+import android.support.multidex.MultiDexApplication
 import android.widget.Toast
 
 import com.natateam.myevents.BuildConfig
@@ -18,7 +19,7 @@ import timber.log.Timber
 /**
  * Created by macbook on 07/07/ 15.
  */
-class EventApp : Application() {
+class EventApp :Application() {
     private var toast: Toast? = null
     @Inject
     lateinit var  alarmHelper: AlarmHelper
@@ -45,8 +46,8 @@ class EventApp : Application() {
     }
 
     fun setAlarms() {
-        alarmHelper!!.setEventAlarms(realmHelper.getAllEvents())
-        alarmHelper!!.setContactAlarms(realmHelper.getAllContacts())
+        //alarmHelper!!.setEventAlarms(realmHelper.getAllEvents())
+        //alarmHelper!!.setContactAlarms(realmHelper.getAllContacts())
     }
 
     fun showToast(message: String) {

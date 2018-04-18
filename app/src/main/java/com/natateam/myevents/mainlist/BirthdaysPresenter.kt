@@ -1,6 +1,7 @@
 package com.natateam.myevents.mainlist
 
 import com.natateam.myevents.Consts
+import com.natateam.myevents.FirebaseHelper
 import com.natateam.myevents.db.Contact
 import com.natateam.myevents.db.Event
 import com.natateam.myevents.db.RealmHelper
@@ -15,18 +16,18 @@ import javax.inject.Inject
  */
 class BirthdaysPresenter
 @Inject
-constructor(open var view: MainCotractor.BirthdayView,open  var realmHelper: RealmHelper) :
+constructor( var view: MainCotractor.BirthdayView, var realmHelper: RealmHelper) :
         MainCotractor.BirthdayPresenter {
 
     var contact: Contact? = null
-    var id: Long? = null
+    var id: String? = null
 
     override fun isViewAttached() {
         //realmHelper.realm!!.addChangeListener({ showEventActivity() })
     }
 
     override fun loadData() {
-        view.loadData(realmHelper.getAllContacts())
+        //view.loadData(realmHelper.getAllContacts())
     }
 
 
@@ -35,14 +36,15 @@ constructor(open var view: MainCotractor.BirthdayView,open  var realmHelper: Rea
     }
 
     fun saveContact(contactModel: ContactModel) {
-        id = realmHelper.createOrUpdateContact(contact, contactModel)
+        id = FirebaseHelper.addContact(contactModel)
+        //id = realmHelper.createOrUpdateContact(contact, contactModel)
         showEventActivity()
     }
 
     fun showEventActivity(){
-        if (id!=null) {
+        /*if (id!=null) {
             contact = realmHelper.getContactById(id!!)
-        }
+        }*/
         if (id!=null) {
             view.showEventActivity(id!!)
         }
@@ -50,7 +52,7 @@ constructor(open var view: MainCotractor.BirthdayView,open  var realmHelper: Rea
 
 
     fun saveContactBirthday(birthday: String) {
-        realmHelper.updateContactBirthday(contact, birthday)
+        //realmHelper.updateContactBirthday(contact, birthday)
     }
 
 
